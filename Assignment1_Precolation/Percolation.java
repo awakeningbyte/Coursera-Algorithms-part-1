@@ -19,22 +19,28 @@ public class Percolation {
 
     public void open(int row, int col) throws java.lang.IllegalArgumentException {
         int pos = translate(row, col);
+        //System.out.println("Open row, col:" + row +":"+col+ " " + pos);
         //mark position open
         _grid[pos] =1;
 
         //mark component status
-        if (row ==0) {
+        if (row ==1) {
             _status[pos] = 1;
         } else if (row == _size ) {
             _status[pos] = 2;
         }
 
+        //System.out.println("compnet id of: " +pos + " is "+_uf.find(pos));
         //check open neighours
         for(int n: neighours(row, col)) {
             if (pos != n && isOpen(n)) {
+                //System.out.println("---------  neigbour :" + n);
                 int n_compId = _uf.find(n); 
                 int pos_compId = _uf.find(pos);
 
+               // System.out.println("n_compid: " +n_compId);
+               //System.out.println("pos_cid: " + pos_compId );
+               //System.out.println("Status_pos_cid, Status_n_compid: [" + _status[pos_compId] +" : "+_status[n_compId]+"]");
                 if ((_status[pos_compId] + _status[n_compId])==3) {
                     this._percolates = true;
                     return;
@@ -47,6 +53,7 @@ public class Percolation {
                 int newCompId = _uf.find(pos);
                 
                 _status[newCompId] = Math.max(_status[pos_compId], _status[n_compId]);
+
             }
         }
     }
