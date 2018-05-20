@@ -9,14 +9,17 @@ public class Percolation {
     int[] _status;
     WeightedQuickUnionUF _uf;
     boolean _percolates = false;
-    public Percolation(int n) {
+    public Percolation(int n) throws java.lang.IllegalArgumentException {
+        if (n < 0) {
+            throw new IllegalArgumentException();
+        }
         _size = n;
         _grid = new int[n*n];
         _status = new int[n*n];
         _uf = new WeightedQuickUnionUF(n*n);
     }
 
-    public void open(int row, int col) {
+    public void open(int row, int col) throws java.lang.IllegalArgumentException {
         int pos = translate(row, col);
         //mark position open
         _grid[pos] =1;
@@ -50,14 +53,14 @@ public class Percolation {
         }
     }
 
-    public boolean isOpen(int row, int col) {
+    public boolean isOpen(int row, int col) throws java.lang.IllegalArgumentException{
         return isOpen(translate(row, col));
     }
     public boolean isOpen(int n){
         return _grid[n]>0;
     }
 
-    public boolean isFull(int row, int col){
+    public boolean isFull(int row, int col) throws java.lang.IllegalArgumentException {
         return _status[_uf.find(translate(row, col))]==1;
     }
 
@@ -77,7 +80,10 @@ public class Percolation {
 
     }
 
-    private int translate(int row, int col) {
+    private int translate(int row, int col) throws java.lang.IllegalArgumentException {
+        if ((row < 0) || (col < 0) || (row > _size) || (col > _size)) {
+            throw new java.lang.IllegalArgumentException();
+        }
         return (row -1) * _size + col -1;
     }
 
