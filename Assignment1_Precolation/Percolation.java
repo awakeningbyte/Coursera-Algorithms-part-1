@@ -15,12 +15,18 @@ public class Percolation {
         _grid = new int[n*n];
         _status = new int[n*n];
         _uf = new WeightedQuickUnionUF(n*n);
+        for (int i=0;i<n*n; i++) {
+            _grid[i]=0;
+            _status[i]=0;
+        }
     }
 
     public void open(int row, int col) throws java.lang.IllegalArgumentException {
         int pos = translate(row, col);
-        //System.out.println("Open row, col:" + row +":"+col+ " " + pos);
         //mark position open
+        if (_grid[pos] > 0) {
+            return;
+        }
         _grid[pos] =1;
 
         //mark component status
@@ -30,28 +36,25 @@ public class Percolation {
             _status[pos] = 2;
         }
 
-        //System.out.println("compnet id of: " +pos + " is "+_uf.find(pos));
         //check open neighours
+        int current = 0;
+
         for(int n: neighours(row, col)) {
             if (pos != n && isOpen(n)) {
-                //System.out.println("---------  neigbour :" + n);
                 int n_compId = _uf.find(n); 
                 int pos_compId = _uf.find(pos);
 
-               // System.out.println("n_compid: " +n_compId);
-               //System.out.println("pos_cid: " + pos_compId );
-               //System.out.println("Status_pos_cid, Status_n_compid: [" + _status[pos_compId] +" : "+_status[n_compId]+"]");
                 if ((_status[pos_compId] + _status[n_compId])==3) {
                     this._percolates = true;
                     return;
                 } 
+
+                _uf.union(pos, n);
+                
                 if (_status[n_compId] == _status[pos_compId]) {
                     continue;
                 }
-
-                _uf.union(pos, n);
                 int newCompId = _uf.find(pos);
-                
                 _status[newCompId] = Math.max(_status[pos_compId], _status[n_compId]);
 
             }

@@ -13,16 +13,13 @@ public class PercolationStats {
 
         data = new double[trails];
         for (int i =0; i < trails; i++) {
-            Stopwatch sw = new Stopwatch();
             Percolation pc = new Percolation(n);
-            
            while(!pc.percolates())  {
-            //for (int j =0; j <10;j++){
                 int row = StdRandom.uniform(1, n+1);
                 int col = StdRandom.uniform(1, n+1);
                 pc.open(row, col);
             }
-            double et =sw.elapsedTime();
+        double et = (double)pc.numberOfOpenSites()/ (n *n);
             data[i] = et;
         }
     }
@@ -40,7 +37,6 @@ public class PercolationStats {
         return mean()-1.96*stddev()/Math.sqrt(_trails);
     }
     public static void main(String[] args) {
-        //System.out.println("0:"+args[0]+" 1:"+ args[1]);
         int n = Integer.parseInt(args[0]);
         int trails = Integer.parseInt( args[1]);
         PercolationStats stats = new PercolationStats(n, trails);
