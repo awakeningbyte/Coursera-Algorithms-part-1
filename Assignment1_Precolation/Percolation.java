@@ -46,21 +46,19 @@ public class Percolation {
                 int posCompId = uf.find(pos);
                 uf.union(pos, n);
                 int newCompId = uf.find(pos);
-                if (status[nCompId]==1 && status[posCompId]==0) status[newCompId] = 1;
-                if (status[nCompId]==2 && status[posCompId] == 0) status[newCompId] = 2;
-                
-                if (status[nCompId] == status[posCompId]) {
-                    continue;
+                if ((status[nCompId] + status[posCompId])==3) {
+                    percolates = true;
+                    status[nCompId] = 3;
+                    status[posCompId] = 3;
+                    return;
                 }
 
-                if ((status[posCompId] + status[nCompId]) == 3) {
-                    status[nCompId] = 1;
-                    status[posCompId] = 1;
-                    this.percolates = true;
-                    return;
-                } 
-
                 status[newCompId] = Math.max(status[posCompId], status[nCompId]);
+                if (status[nCompId] < status[posCompId]) {
+                    status[nCompId] = status[newCompId];
+                }else {
+                    status[posCompId] = status[newCompId];
+                }
             }
         }
     }
@@ -74,7 +72,8 @@ public class Percolation {
     }
 
     public boolean isFull(int row, int col) {
-        return status[uf.find(translate(row, col))] == 1;
+        int pos = uf.find(translate(row, col));
+        return status[pos] == 1 || status[pos] == 3;
     }
 
     public int numberOfOpenSites() {
