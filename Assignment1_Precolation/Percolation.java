@@ -1,3 +1,5 @@
+import org.omg.PortableServer._ServantActivatorStub;
+
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 public class Percolation {
     private int size;
@@ -45,10 +47,12 @@ public class Percolation {
                 int nCompId = uf.find(n); 
                 int posCompId = uf.find(pos);
                 uf.union(pos, n);
-
+                int newCompId = uf.find(pos);
+                if (status[nCompId]==1 && status[posCompId]==0) status[newCompId] = 1;
+                if (status[nCompId]==2 && status[posCompId] == 0) status[newCompId] = 2;
                 if ((status[posCompId] + status[nCompId]) == 3) {
                     status[nCompId] = 1;
-                    status[posCompId] =1;
+                    status[posCompId] = 1;
                     this.percolates = true;
                     return;
                 } 
@@ -57,7 +61,6 @@ public class Percolation {
                 if (status[nCompId] == status[posCompId]) {
                     continue;
                 }
-                int newCompId = uf.find(pos);
                 status[newCompId] = Math.max(status[posCompId], status[nCompId]);
             }
         }
