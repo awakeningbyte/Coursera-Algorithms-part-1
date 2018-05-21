@@ -5,8 +5,8 @@ public class PercolationStats {
     private double[] data;
     private int trails;
     public PercolationStats(int n, int trials) {
-        if ((n < 0) || (trials < 0)) {
-            throw new IllegalArgumentException();
+        if ((n < 1) || (trials < 1)) {
+            throw new IllegalArgumentException("Invalid grid size");
         }
         trails = trials;
 

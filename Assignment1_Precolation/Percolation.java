@@ -7,8 +7,8 @@ public class Percolation {
     private boolean percolates = false;
 
     public Percolation(int n) {
-        if (n < 0) {
-            throw new IllegalArgumentException();
+        if (n < 1) {
+            throw new IllegalArgumentException("n must be lager than 1");
         }
         size = n;
         grid = new int[n*n];
@@ -29,7 +29,11 @@ public class Percolation {
         grid[pos] = 1;
 
         // mark component status
-        if (row == 1) {
+        if (row ==1 && row ==size){
+            status[pos] = 1;
+            percolates = true;
+            return;
+        } else if (row == 1) {
             status[pos] = 1;
         } else if (row == size) {
             status[pos] = 2;
@@ -40,13 +44,15 @@ public class Percolation {
             if (pos != n && isOpen(n)) {
                 int nCompId = uf.find(n); 
                 int posCompId = uf.find(pos);
+                uf.union(pos, n);
 
                 if ((status[posCompId] + status[nCompId]) == 3) {
+                    status[nCompId] = 1;
+                    status[posCompId] =1;
                     this.percolates = true;
                     return;
                 } 
 
-                uf.union(pos, n);
                 
                 if (status[nCompId] == status[posCompId]) {
                     continue;
@@ -86,7 +92,7 @@ public class Percolation {
     }
 
     private int translate(int row, int col) {
-        if ((row < 0) || (col < 0) || (row > size) || (col > size)) {
+        if ((row < 1) || (col < 1) || (row > size) || (col > size)) {
             throw new java.lang.IllegalArgumentException();
         }
         return (row -1) * size + col -1;
