@@ -52,12 +52,15 @@ public class Percolation {
                     status[posCompId] = 3;
                     return;
                 }
-
+                
                 status[newCompId] = Math.max(status[posCompId], status[nCompId]);
                 if (status[nCompId] < status[posCompId]) {
                     status[nCompId] = status[newCompId];
                 }else {
                     status[posCompId] = status[newCompId];
+                }
+                if ((status[newCompId]==1 || status[newCompId]==3 ) && (!isFull(row,col) || !(status[nCompId] == 1 || status[nCompId] == 3) )){
+                    throw new IllegalArgumentException("backwash: status[newCompId]: "+status[newCompId] + " isFull(row,col) " +isFull(row,col)+ "s tatus[nCompId]: "+status[nCompId] );
                 }
             }
         }

@@ -4,6 +4,8 @@ import edu.princeton.cs.algs4.StdStats;
 public class PercolationStats {
     private double[] data;
     private int trails;
+    private double mean;
+    private double stddev;
     public PercolationStats(int n, int trials) {
         if ((n < 1) || (trials < 1)) {
             throw new IllegalArgumentException("Invalid grid size");
@@ -12,8 +14,10 @@ public class PercolationStats {
 
         data = new double[trials];
         for (int i = 0; i < trials; i++) {
+            mean = 0;
+            stddev = 0;
             Percolation pc = new Percolation(n);
-           while (!pc.percolates())  {
+            while (!pc.percolates())  {
                 int row = StdRandom.uniform(1, n + 1);
                 int col = StdRandom.uniform(1, n + 1);
                 pc.open(row, col);
@@ -24,10 +28,16 @@ public class PercolationStats {
     }
 
     public double mean() {
-        return StdStats.mean(data);
+        if (mean == 0) {
+            mean = StdStats.mean(data);
+        }
+        return mean;
     }
     public double stddev() {
-        return StdStats.stddev(data);
+        if (stddev == 0) {
+            stddev = StdStats.stddev(data);
+        }
+        return stddev;
     }
     public double confidenceLo() {
         return mean() - 1.96 * stddev() / Math.sqrt(trails);
